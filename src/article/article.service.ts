@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Article } from './article.entity';
@@ -23,23 +27,43 @@ export class ArticleService {
   }
 
   async create(createArticleDto: CreateArticleDto): Promise<Article> {
-    const article = this.articleRepository.create(createArticleDto);
-    return this.articleRepository.save(article);
+    try {
+      const article = this.articleRepository.create(createArticleDto);
+      return this.articleRepository.save(article);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException(
+          '해당 제목과 작성자를 가진 게시글이 이미 존재합니다.',
+        );
+      }
+      throw error;
+    }
   }
 
   async update(
     id: number,
     updateArticleDto: UpdateArticleDto,
   ): Promise<Article> {
-    const article = await this.articleRepository.findOne({ where: { id } });
-    if (!article) {
-      throw new NotFoundException('Article not found');
+    try {
+      const article = await this.articleRepository.findOne({ where: { id } });
+      if (!article) {
+        throw new NotFoundException(`${id}번 게시글을 찾을 수 없습니다.`);
+      }
+      await this.articleRepository.update(id, updateArticleDto);
+      return this.articleRepository.findOne({ where: { id } });
+    } catch (error) {
+      throw error;
     }
-    await this.articleRepository.update(id, updateArticleDto);
-    return this.articleRepository.findOne({ where: { id } });
   }
 
   async delete(id: number): Promise<void> {
-    await this.articleRepository.delete(id);
+    try {
+      const result = await this.articleRepository.delete(id);
+      if (result.affected === 0) {
+        throw new NotFoundException(`${id}번 게시글을 찾을 수 없습니다.`);
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 }
