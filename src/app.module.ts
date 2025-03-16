@@ -12,8 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.DB_USERNAME || 'test',
       password: process.env.DB_PASSWORD || 'test',
       database: process.env.DB_DATABASE || 'inflearn',
-      autoLoadEntities: true,
-      synchronize: true,
+      autoLoadEntities: true, // entity 파일들을 일일히 Import 하지 않아도 자동으로 인식
     }),
     ArticleModule,
   ],

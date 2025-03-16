@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Article {
+  // 기본키 설정
   @PrimaryGeneratedColumn({
     type: 'int',
   })
