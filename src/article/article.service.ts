@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Article } from './article.entity';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { ArticleRepository } from './article.repository';
 
 // service는 비즈니스 로직을 작성하는 곳
 @Injectable()
 export class ArticleService {
   // 생성자 주입
-  constructor(private readonly articleRepository: ArticleRepository) {}
+  constructor(
+    @InjectRepository(Article)
+    private readonly articleRepository: Repository<Article>,
+  ) {}
 
   async findAll(): Promise<Article[]> {
     return this.articleRepository.find();
@@ -27,11 +31,15 @@ export class ArticleService {
     id: number,
     updateArticleDto: UpdateArticleDto,
   ): Promise<Article> {
+    const article = await this.articleRepository.findOne({ where: { id } });
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
     await this.articleRepository.update(id, updateArticleDto);
     return this.articleRepository.findOne({ where: { id } });
   }
 
   async delete(id: number): Promise<void> {
-    await this.articleRepository.remove(id);
+    await this.articleRepository.delete(id);
   }
 }
