@@ -11,9 +11,8 @@ const config = {
   entities: ['dist/**/**/*.entity.{js,ts}'],
   migrations: ['dist/migrations/*.js'],
   autoLoadEntities: true,
-  synchronize: false,
+  synchronize: false, // entity가 변경되었을 때 자동으로 테이블을 생성하는 설정, prod 환경에서는 사용하지 않음
 };
 
 export default registerAs('typeorm', () => config);
-
 export const typeOrmConfig = new DataSource(config as DataSourceOptions);

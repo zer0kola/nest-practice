@@ -1,8 +1,8 @@
 {
   "name": "backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "nest backend practice",
+  "author": "zer0kola",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -19,11 +19,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
-    "migration:run": "pnpm typeorm migration:run -- -d ./src/config/typeorm.ts",
-    "migration:generate": "pnpm typeorm -- -d ./src/config/typeorm.ts migration:generate ./src/migrations/$npm_config_name",
-    "migration:create": "pnpm typeorm -- migration:create ./src/migrations/$npm_config_name",
-    "migration:revert": "pnpm typeorm -- -d ./src/config/typeorm.ts migration:revert",
-    "migration:show": "pnpm typeorm -- -d ./src/config/typeorm.ts migration:show"
+    "migration:run": "npm run typeorm migration:run -- -d ./src/config/typeorm.ts",
+    "migration:generate": "npm run typeorm -- -d ./src/config/typeorm.ts migration:generate ./src/migrations/$npm_config_name",
+    "migration:create": "npm run typeorm -- migration:create ./src/migrations/$npm_config_name",
+    "migration:revert": "npm run typeorm -- -d ./src/config/typeorm.ts migration:revert",
+    "migration:show": "npm run typeorm -- -d ./src/config/typeorm.ts migration:show"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -43,10 +43,12 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
+    "@types/eslint": "^9.6.1",
+    "@types/eslint-scope": "^3.7.7",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
-    "@types/supertest": "^6.0.0",
+    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "eslint": "^8.0.0",
